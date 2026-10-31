@@ -28,15 +28,15 @@ import { IMG } from "./rtlh-assets";
 
 
 /* ---------------------------------------------------------------------- */
-/* PICTURE GALLERY LINK                                                     */
-/* Paste your online gallery address between the quotes. When a customer    */
-/* picks "Picture engraving", a "View all pictures" button opens this link  */
-/* in a new tab, and they type the picture's number in the box below it.    */
-/* Leave it empty ("") and the button simply doesn't show.                  */
+/* PICTURE GALLERY                                                          */
+/* Pictures live in  public/gallery/  and are named 1.jpg, 2.jpg, 3.jpg ... */
+/* Set GALLERY_COUNT to the highest picture number you have. When you add   */
+/* more pictures, upload them and raise this number.                        */
+/* Missing numbers are skipped automatically.                               */
 /* To remove picture engraving from a product, set  pictureEngraving: false */
 /* ---------------------------------------------------------------------- */
 
-export const PICTURE_GALLERY_URL = "";   // e.g. "https://rtlh.art/gallery"
+export const GALLERY_COUNT = 200;
 
 
 /* ---------------------------------------------------------------------- */
