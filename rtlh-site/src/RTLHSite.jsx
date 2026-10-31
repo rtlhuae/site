@@ -5,7 +5,7 @@ import {
   ArrowRight, Music2, Globe, ShieldCheck, Truck, Sparkle,
 } from "lucide-react";
 import { IMG } from "./rtlh-assets";
-import { PRODUCTS, COLOR_HEX, COLOR_NAMES, PICTURE_GALLERY_URL } from "./rtlh-products";
+import { PRODUCTS, COLOR_HEX, COLOR_NAMES, GALLERY_COUNT } from "./rtlh-products";
 
 /* ---------------------------------------------------------------------- */
 /* BRAND TOKENS                                                            */
@@ -38,6 +38,9 @@ const WHATSAPP_DISPLAY = "+971 58 882 2520";
 const SOCIAL_HANDLE = "@rtlh.ae";
 const WEBSITE = "rtlh.art";
 const SLOGAN = "made yours.";
+
+// Picture gallery: images live in public/gallery/1.jpg, 2.jpg, ...
+const galleryImg = (n) => `./gallery/${n}.jpg`;
 
 /* ---------------------------------------------------------------------- */
 /* PRODUCT DATA                                                            */
@@ -694,19 +697,26 @@ function ShopPage({ navigate }) {
 /* PRODUCT DETAIL PAGE                                                     */
 /* ---------------------------------------------------------------------- */
 
-function ProductPage({ slug, navigate }) {
+function ProductPage({ slug, navigate, draft, onOpenGallery, onDraftUsed }) {
   const product = PRODUCTS.find((p) => p.slug === slug) || PRODUCTS[0];
-  const [colorId, setColorId] = useState(null);
-  const [type, setType] = useState("none");
-  const [text, setText] = useState("");
-  const [pictureNo, setPictureNo] = useState("");
-  const [foilColor, setFoilColor] = useState(product.customization.foilColors[0] || "gold");
+  // If the customer just came back from the gallery, restore everything they had chosen
+  const saved = draft && draft.slug === slug ? draft : null;
+  const [colorId, setColorId] = useState(saved ? saved.colorId : null);
+  const [type, setType] = useState(saved ? saved.type : "none");
+  const [text, setText] = useState(saved ? saved.text : "");
+  const [pictureNo] = useState(saved ? saved.pictureNo || "" : "");
+  const [foilColor, setFoilColor] = useState(saved ? saved.foilColor : (product.customization.foilColors[0] || "gold"));
+  const pictureRef = useRef(null);
 
   useEffect(() => {
-    setColorId(null);
-    setType("none"); setText(""); setPictureNo("");
-    setFoilColor(product.customization.foilColors[0] || "gold");
-  }, [slug]); // eslint-disable-line
+    if (!saved) return;
+    onDraftUsed();
+    if (saved.pictureNo && pictureRef.current) {
+      pictureRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, []); // eslint-disable-line
+
+  const goPickPicture = () => onOpenGallery({ slug, colorId, type, text, foilColor, pictureNo });
 
   const activeColorId = colorId || product.colors[0].id;
   const maxChars =
@@ -849,36 +859,38 @@ function ProductPage({ slug, navigate }) {
               </div>
             )}
 
-            {/* Picture engraving: gallery link + picture number (only when "Picture engraving" is selected) */}
+            {/* Picture engraving: choose from the gallery (one tap, then back here) */}
             {type === "picture" && (
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ marginBottom: 16, padding: "16px 18px", background: C.card, border: `1px solid ${C.line}`, borderRadius: 2, fontFamily: sans, fontSize: 13.5, lineHeight: 1.7, color: C.ink }}>
-                  Browse our picture gallery, pick the one you like, and enter its number below. We'll confirm the final artwork with you on WhatsApp before production.
-                </div>
-                {PICTURE_GALLERY_URL && (
-                  <SecondaryButton
-                    as="a" href={PICTURE_GALLERY_URL} target="_blank" rel="noopener noreferrer"
-                    style={{ width: "100%", marginBottom: 20 }}
-                  >
-                    View all pictures <ArrowRight size={15} />
-                  </SecondaryButton>
+              <div ref={pictureRef} style={{ marginBottom: 24 }}>
+                {pictureNo ? (
+                  <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 16px", background: C.card, border: `1px solid ${C.line}`, borderRadius: 2 }}>
+                    <img
+                      src={galleryImg(pictureNo)} alt={`Picture ${pictureNo}`}
+                      style={{ width: 88, height: 88, objectFit: "cover", borderRadius: 2, border: `1px solid ${C.line}`, background: "#fff" }}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: serif, fontSize: 26, color: C.charcoal, lineHeight: 1.1 }}>Picture No. {pictureNo}</div>
+                      <button
+                        onClick={goPickPicture}
+                        style={{
+                          fontFamily: sans, fontSize: 13, fontWeight: 700, color: C.champagneDark, background: "none",
+                          border: "none", padding: 0, marginTop: 8, cursor: "pointer", textDecoration: "underline",
+                        }}
+                      >
+                        Change picture
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ marginBottom: 16, padding: "16px 18px", background: C.card, border: `1px solid ${C.line}`, borderRadius: 2, fontFamily: sans, fontSize: 13.5, lineHeight: 1.7, color: C.ink }}>
+                      Choose a picture from our gallery to be engraved. We’ll confirm the final artwork with you on WhatsApp before production.
+                    </div>
+                    <SecondaryButton onClick={goPickPicture} style={{ width: "100%" }}>
+                      Choose a picture <ArrowRight size={15} />
+                    </SecondaryButton>
+                  </>
                 )}
-                <div style={{ fontFamily: sans, fontSize: 12.5, fontWeight: 700, letterSpacing: "0.06em", color: C.charcoal, marginBottom: 14 }}>
-                  PICTURE NUMBER
-                </div>
-                <input
-                  value={pictureNo}
-                  onChange={(e) => setPictureNo(e.target.value.replace(/\D/g, "").slice(0, 5))}
-                  inputMode="numeric"
-                  placeholder="e.g. 12"
-                  style={{
-                    width: "100%", fontFamily: sans, fontSize: 15, padding: "14px 16px",
-                    border: `1px solid ${C.line}`, borderRadius: 2, background: C.card, color: C.charcoal,
-                    outline: "none", boxSizing: "border-box",
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = C.champagne)}
-                  onBlur={(e) => (e.target.style.borderColor = C.line)}
-                />
               </div>
             )}
 
@@ -1113,8 +1125,72 @@ function ContactPage() {
 /* APP ROOT                                                                */
 /* ---------------------------------------------------------------------- */
 
+/* ---------------------------------------------------------------------- */
+/* PICTURE GALLERY (one tap on a picture selects it and returns to order)  */
+/* ---------------------------------------------------------------------- */
+
+function GalleryPage({ productName, onPick, onBack }) {
+  const [missing, setMissing] = useState({});
+  const shown = Array.from({ length: GALLERY_COUNT }, (_, i) => i + 1).filter((n) => !missing[n]);
+
+  return (
+    <section style={{ padding: "100px 24px 120px" }}>
+      <div style={{ maxWidth: 1240, margin: "0 auto" }}>
+        <button
+          onClick={onBack}
+          style={{
+            fontFamily: sans, fontSize: 13, fontWeight: 700, color: C.champagneDark, background: "none",
+            border: "none", padding: 0, marginBottom: 28, cursor: "pointer", textDecoration: "underline",
+          }}
+        >
+          ← Back to {productName}
+        </button>
+        <Eyebrow>Picture gallery</Eyebrow>
+        <Heading size={44} style={{ marginBottom: 16 }}>Choose your picture.</Heading>
+        <p style={{ fontFamily: sans, fontSize: 16, color: C.ink, maxWidth: 560, marginBottom: 40, lineHeight: 1.75 }}>
+          Tap a picture to select it. You’ll go straight back to your order.
+        </p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 14 }}>
+          {shown.map((n) => (
+            <button
+              key={n}
+              onClick={() => onPick(n)}
+              aria-label={`Select picture ${n}`}
+              style={{
+                position: "relative", padding: 0, borderRadius: 2, background: "#fff", cursor: "pointer",
+                border: `1px solid ${C.line}`, aspectRatio: "1 / 1", overflow: "hidden",
+                contentVisibility: "auto", containIntrinsicSize: "auto 180px",
+              }}
+            >
+              <img
+                src={galleryImg(n)} alt={`Picture ${n}`}
+                loading="lazy" decoding="async" width="450" height="450"
+                onError={() => setMissing((m) => ({ ...m, [n]: true }))}
+                style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }}
+              />
+              <span
+                style={{
+                  position: "absolute", left: 8, bottom: 8, fontFamily: sans, fontSize: 12.5, fontWeight: 800,
+                  color: C.ivory, background: "rgba(36,29,20,0.82)", padding: "3px 9px", borderRadius: 12,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {n}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function RTLHSite() {
   const [route, setRoute] = useState({ page: "home", slug: null });
+  // What the customer had chosen on a product page while they browse the gallery
+  const [draft, setDraft] = useState(null);
+
   const navigate = (page, slug = null) => {
     setRoute({ page, slug });
     window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
@@ -1141,9 +1217,28 @@ export default function RTLHSite() {
       {route.page === "home" && <HomePage navigate={navigate} />}
       {route.page === "events" && <EventsPage />}
       {route.page === "shop" && <ShopPage navigate={navigate} />}
-      {route.page === "product" && <ProductPage slug={route.slug} navigate={navigate} />}
+      {route.page === "product" && (
+        <ProductPage
+          key={route.slug}
+          slug={route.slug}
+          navigate={navigate}
+          draft={draft}
+          onOpenGallery={(d) => { setDraft(d); navigate("gallery", d.slug); }}
+          onDraftUsed={() => setDraft(null)}
+        />
+      )}
       {route.page === "about" && <AboutPage navigate={navigate} />}
       {route.page === "contact" && <ContactPage />}
+      {route.page === "gallery" && (
+        <GalleryPage
+          productName={(PRODUCTS.find((p) => p.slug === route.slug) || PRODUCTS[0]).name}
+          onBack={() => navigate("product", route.slug)}
+          onPick={(n) => {
+            setDraft((d) => ({ ...(d || { slug: route.slug }), type: "picture", pictureNo: String(n) }));
+            navigate("product", route.slug);
+          }}
+        />
+      )}
 
       <Footer navigate={navigate} />
     </div>
