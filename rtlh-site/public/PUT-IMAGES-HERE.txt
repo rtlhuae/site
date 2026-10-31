@@ -1,0 +1,2 @@
+Every product photo and background image goes in this folder (public).
+You can delete this note after adding the images.
