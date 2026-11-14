@@ -50,7 +50,7 @@ export function GalleryPicker({ open, onClose, onPick, selected, productName }) 
         <button className="icon-btn" onClick={onClose} aria-label="Close"><X size={22} /></button>
       </div>
       <div className="picker-body">
-        <p className="muted small" style={{ margin: "0 0 12px" }}>Tap a picture to select it — you'll see it on your piece straight away.</p>
+        <p className="muted small" style={{ margin: "0 0 12px" }}>Tap a picture to select it.</p>
         <DesignGrid selected={selected} onPick={(n) => { onPick(n); onClose(); }} />
       </div>
     </div>

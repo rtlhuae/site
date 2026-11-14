@@ -76,7 +76,7 @@ export default function Home() {
           <h2 style={{ marginBottom: 28 }}>Personalised in three steps</h2>
           <div className="steps">
             <div className="step"><span className="n">1</span><h3>Pick your piece</h3><p>Choose a product and a leather colour.</p></div>
-            <div className="step"><span className="n">2</span><h3>Make it yours</h3><p>Type a name or initials, or choose a picture from our gallery — and see it on your piece before you order.</p></div>
+            <div className="step"><span className="n">2</span><h3>Make it yours</h3><p>Type a name or initials, or choose a picture from our gallery.</p></div>
             <div className="step"><span className="n">3</span><h3>We engrave & deliver</h3><p>Every piece is engraved by hand in Dubai and delivered to your door across the UAE.</p></div>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function Home() {
             <h2 style={{ marginBottom: 14 }}>Choose a picture. We engrave it.</h2>
             <p className="lead">
               {GALLERY_NUMBERS.length}+ designs — Emirati icons, cars, number plates, Arabic calligraphy, quotes and more.
-              Tap one on any product to see it on your piece, and we'll confirm the artwork with you on WhatsApp before engraving.
+              Choose one on any product, and we'll confirm the artwork with you on WhatsApp before engraving.
             </p>
             <Link to="/gallery" className="btn" style={{ marginTop: 6 }}>Browse the gallery <Images size={17} /></Link>
           </div>

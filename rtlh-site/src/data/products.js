@@ -75,9 +75,6 @@ export const FONTS = [
   { id: "arabic", label: "Arabic", css: "'Amiri', serif", sample: "أ", arabic: true },
 ];
 
-/* engrave: where the engraving sits on each colour photo, for the live preview only.
-   x / y = centre (% of the photo), w = width it can use (%), rot = rotation (degrees). */
-
 export const ALL_PRODUCTS = [
   {
     slug: "the-porte", name: "The Porte", badge: "Bestseller",
@@ -110,7 +107,6 @@ export const ALL_PRODUCTS = [
       { id: "white", image: "MagsafeWhite" },
       { id: "yellow", image: "MagsafeYellow" },
     ],
-    engrave: { x: 50, y: 53, w: 24, rot: 0 },
     personalise: { text: true, maxChars: 16, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -132,7 +128,6 @@ export const ALL_PRODUCTS = [
       { id: "white", image: "MagfoldWhite" },
       { id: "wine", image: "MagfoldWine" },
     ],
-    engrave: { x: 46, y: 50, w: 30, rot: 0 },
     personalise: { text: true, maxChars: 16, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -153,7 +148,6 @@ export const ALL_PRODUCTS = [
       { id: "red", image: "TheHeartpieceRed" },
       { id: "gray", image: "TheHeartpieceGray" },
     ],
-    engrave: { x: 50, y: 84, w: 11, rot: 0 },
     personalise: { text: true, maxChars: 24, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -170,7 +164,6 @@ export const ALL_PRODUCTS = [
       { id: "red", image: "HeartMirrorRed" },
       { id: "cream", image: "HeartMirrorWhite" },
     ],
-    engrave: { x: 50, y: 56, w: 50, rot: 0 },
     personalise: { text: true, maxChars: 18, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -182,11 +175,10 @@ export const ALL_PRODUCTS = [
     details: ["Stand-up travel mirror", "Soft leather cover", "Text or picture engraving"],
     mainImage: "FoldableMirrorMain",
     colors: [
-      { id: "mint", image: "FoldableMirrorGreen", engrave: { x: 44, y: 44, w: 42, rot: -36 } },
-      { id: "pink", image: "FoldableMirrorPink", engrave: { x: 44, y: 44, w: 42, rot: -36 } },
-      { id: "white", image: "FoldableMirrorWhite", engrave: { x: 50, y: 34, w: 34, rot: 0 } },
+      { id: "mint", image: "FoldableMirrorGreen", },
+      { id: "pink", image: "FoldableMirrorPink", },
+      { id: "white", image: "FoldableMirrorWhite", },
     ],
-    engrave: { x: 44, y: 44, w: 42, rot: -36 },
     personalise: { text: true, maxChars: 20, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -204,7 +196,6 @@ export const ALL_PRODUCTS = [
       { id: "red", image: "TheVoyageTagRed" },
       { id: "white", image: "TheVoyageTagWhite" },
     ],
-    engrave: { x: 50, y: 90, w: 9, rot: 0 },
     personalise: { text: true, maxChars: 22, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -218,7 +209,6 @@ export const ALL_PRODUCTS = [
     mainImage: "NecklaceMain",
     colors: [{ id: "gold", image: "NecklaceMain" }],
     gallery: ["Necklace1", "Necklace2"],
-    engrave: { x: 52, y: 82, w: 6, rot: 0 },
     personalise: { text: true, maxChars: 1, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -237,7 +227,6 @@ export const ALL_PRODUCTS = [
       { id: "navy", image: "RTLHCardHolderNavy" },
     ],
     gallery: ["RTLHWallet"],
-    engrave: { x: 50, y: 60, w: 34, rot: 0 },
     personalise: { text: true, maxChars: 20, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -255,7 +244,6 @@ export const ALL_PRODUCTS = [
       { id: "blue", image: "CardholderBlue" },
       { id: "pink", image: "CardholderPink" },
     ],
-    engrave: { x: 50, y: 58, w: 34, rot: -8 },
     personalise: { text: true, maxChars: 20, picture: true, textPrice: 0, picturePrice: 0 },
   },
 ];

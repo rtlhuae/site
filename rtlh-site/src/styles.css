@@ -393,3 +393,10 @@ p { margin: 0 0 1em; }
 .chosen { display: flex; align-items: center; gap: 14px; border: 1.5px solid var(--line); border-radius: 14px; padding: 10px; background: var(--paper); margin-top: 14px; }
 .chosen img { width: 72px; height: 72px; object-fit: contain; border-radius: 8px; border: 1px solid var(--line); background: #fff; padding: 4px; }
 .chosen b { font: 500 22px/1.1 var(--serif); display: block; }
+
+/* ---------- "Your choice" summary on product pages ---------- */
+.summary { margin-top: 24px; background: var(--sand); border-radius: var(--radius); padding: 16px 18px; display: grid; gap: 6px; }
+.summary > div { display: flex; justify-content: space-between; gap: 14px; font-size: 14.5px; }
+.summary > div span { color: var(--muted); }
+.summary > div b { text-align: right; word-break: break-word; font-weight: 600; }
+.summary-pic { width: 64px; height: 64px; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 4px; justify-self: end; }

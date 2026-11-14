@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { Type, ImagePlus, Ban, Check, Upload, Info, Minus, Plus, Eye, Truck, Clock, MessageCircle, X, Images } from "lucide-react";
+import { Type, Ban, Check, Upload, Info, Minus, Plus, Truck, Clock, MessageCircle, X, Images } from "lucide-react";
 import { findProduct, colorName, colorHex, FONTS, unitPrice, PRODUCTS } from "../data/products.js";
-import { EngravingOverlay, ProductCard } from "../components/Product.jsx";
+import { ProductCard } from "../components/Product.jsx";
 import { GalleryPicker, designImg, GALLERY_NUMBERS } from "../components/Gallery.jsx";
 import { useCart } from "../lib/cart.jsx";
 import { aed, img, srcSet, waLink } from "../lib/format.js";
@@ -119,7 +119,6 @@ function ProductView({ product }) {
   const related = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 4);
   const fontObj = FONTS.find((f) => f.id === font) || FONTS[0];
   const extras = [product.mainImage, ...(product.gallery || [])].filter((g) => !product.colors.some((c) => c.image === g));
-  const previewing = view === "color" && ((mode === "text" && text) || (mode === "photo" && pictureSrc));
 
   return (
     <>
@@ -130,14 +129,10 @@ function ProductView({ product }) {
           <span>{product.name}</span>
         </div>
         <div className="pdp">
-          {/* GALLERY + LIVE PREVIEW */}
+          {/* PHOTOS */}
           <div className="pdp-gallery">
             <div className="stage">
               <img src={img(stageImage, 960)} srcSet={srcSet(stageImage)} sizes="(min-width: 900px) 600px, 100vw" alt={`${product.name} in ${colorName(color.id)}`} width="960" height="960" fetchpriority="high" />
-              {view === "color" && (
-                <EngravingOverlay product={product} colorId={color.id} mode={mode} text={text} fontId={font} photo={pictureSrc} />
-              )}
-              {previewing && <span className="preview-note"><Eye size={13} /> Live preview</span>}
             </div>
             <div className="thumbs" role="list">
               {product.colors.map((c) => (
@@ -225,7 +220,7 @@ function ProductView({ product }) {
                   {source === "upload" && (photo ? (
                     <div className="upload-done" style={{ marginTop: 14 }}>
                       <img src={photo.thumb} alt="Your photo" />
-                      <div><b>Photo added</b><br /><span className="muted">See the preview on the image.</span></div>
+                      <div><b>Photo added</b><br /><span className="muted">We'll engrave this photo.</span></div>
                       <button className="icon-btn" aria-label="Remove photo" onClick={() => { deletePhoto(photo.id); setPhoto(null); }}><X size={18} /></button>
                     </div>
                   ) : (
@@ -240,6 +235,19 @@ function ProductView({ product }) {
                   <div className="note"><Info size={16} />We'll confirm the final artwork with you on WhatsApp before production.</div>
                 </div>
               )}
+            </div>
+
+            <div className="summary" aria-live="polite">
+              <span className="eyebrow" style={{ marginBottom: 8 }}>Your choice</span>
+              <div><span>Colour</span><b>{colorName(color.id)}</b></div>
+              <div><span>Engraving</span><b style={mode === "text" && text ? { fontFamily: fontObj.css } : undefined}>
+                {mode === "none" ? "No engraving"
+                  : mode === "text" ? (text ? `“${text}”` : "Add your text above")
+                  : source === "gallery" ? (designNo ? `Picture No. ${designNo}` : "Choose a picture above")
+                  : (photo ? "Your own photo" : "Upload your photo above")}
+              </b></div>
+              {mode === "text" && text && <div><span>Style</span><b>{fontObj.label}</b></div>}
+              {mode === "photo" && pictureSrc && <img src={pictureSrc} alt="" className="summary-pic" />}
             </div>
 
             {error && <div className="err" role="alert">{error}</div>}
@@ -262,8 +270,8 @@ function ProductView({ product }) {
 
             <div className="acc">
               <details>
-                <summary>Engraving & preview</summary>
-                <div>Every piece is engraved by hand, so placement and size can vary slightly from the preview. Colour and finish shown are for reference.</div>
+                <summary>About the engraving</summary>
+                <div>Every piece is engraved by hand — our engravers set the size and placement to suit each piece. Product photos are for reference.</div>
               </details>
               <details>
                 <summary>Delivery & returns</summary>
