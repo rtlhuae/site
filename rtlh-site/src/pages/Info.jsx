@@ -172,7 +172,7 @@ export function Policy({ which }) {
     terms: ["Terms of sale", [
       ["Who we are", `RTLH is a DED-licensed business based in ${CITY}. These terms apply to orders placed on rtlh.art.`],
       ["Orders", "Your order is confirmed once payment is received. We may contact you on WhatsApp to confirm your personalisation, especially for photo engraving. We may decline an order or a design (for example, trademarks you don't own, or offensive content) and refund you in full."],
-      ["Prices & payment", "Prices are in UAE dirhams (AED), shown with the dirham symbol. Payments are processed securely by Ziina; RTLH never sees or stores your card details."],
+      ["Prices & payment", "Prices are in UAE dirhams (AED). Payments are processed securely by Ziina; RTLH never sees or stores your card details."],
       ["Your content", "By uploading a photo or text, you confirm you have the right to use it. We only use it to make your order."],
       ["Product photos", "Product photos are for reference. Leather is a natural material and every engraving is set by hand, so colour, texture and placement may vary slightly."],
       ["Delivery & returns", "See our Delivery & returns policy."],

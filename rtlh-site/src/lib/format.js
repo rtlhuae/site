@@ -1,7 +1,7 @@
 import { colorName, FONTS } from "../data/products.js";
 import { WHATSAPP_NUMBER } from "../config.js";
 
-// Plain-text price (WhatsApp messages, emails). On the page, prices use <Dh v={…} /> with the dirham symbol.
+// Plain-text price (WhatsApp messages, emails). On the page, prices use <Dh v={…} />.
 export const aed = (n) => `AED ${Number(n).toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
 export const img = (name, w = 960) => `/img/p/${name}-${w}.webp`;
 export const srcSet = (name) => `/img/p/${name}-480.webp 480w, /img/p/${name}-960.webp 960w`;
