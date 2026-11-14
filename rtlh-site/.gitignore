@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-ssr/
+.DS_Store
+*.local
+.env*
+.claude/
+public/img/p/
+public/img/l/
+src/data/gallery.json
+public/img/g/
