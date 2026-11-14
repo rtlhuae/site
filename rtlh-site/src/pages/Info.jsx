@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MessageCircle, Instagram, MapPin, ArrowRight, Music2 } from "lucide-react";
 import { waLink } from "../lib/format.js";
-import { INSTAGRAM, TIKTOK, WHATSAPP_DISPLAY, CITY, PRODUCTION_DAYS, PICKUP_ENABLED, DELIVERY_FEE, FREE_DELIVERY_OVER } from "../config.js";
+import { INSTAGRAM, TIKTOK, WHATSAPP_DISPLAY, CITY, PRODUCTION_DAYS, PICKUP_ENABLED, DELIVERY_FEES, DELIVERY_FEE_OTHER, FREE_DELIVERY_OVER, ALLOW_PHOTO_UPLOAD } from "../config.js";
 import { onlineCheckout } from "../lib/api.js";
 
 const ig = (k) => `/img/ig/${k}.webp`;
@@ -126,17 +126,18 @@ export function Contact() {
   );
 }
 
-const delivery = () =>
-  DELIVERY_FEE
-    ? `Delivery anywhere in the UAE costs AED ${DELIVERY_FEE}${FREE_DELIVERY_OVER ? `, and it's free on orders over AED ${FREE_DELIVERY_OVER}` : ""}.`
-    : "Delivery anywhere in the UAE is free.";
+const delivery = () => {
+  const named = Object.entries(DELIVERY_FEES).map(([em, fee]) => `${fee} dirhams in ${em}`);
+  const other = `${DELIVERY_FEE_OTHER} dirhams to ${named.length ? "the other emirates" : "anywhere in the UAE"}`;
+  return `Delivery costs ${[...named, other].join(" and ")}${FREE_DELIVERY_OVER ? `, and it's free on orders over ${FREE_DELIVERY_OVER} dirhams` : ""}.`;
+};
 
 export function Faq() {
   const qa = [
     ["How long does my order take?", `Personalised pieces are usually ready in ${PRODUCTION_DAYS}, then delivered across the UAE. Need it by a date? Add it in the order notes or WhatsApp us.`],
     ["How much is delivery?", `${delivery()}${PICKUP_ENABLED ? ` You can also pick up in ${CITY} for free.` : ""}`],
     ["Can I engrave Arabic?", "Yes — type Arabic in the text box and the Arabic style is selected for you."],
-    ["How does picture engraving work?", "On any product, choose Picture and tap a design from our gallery. You can also upload your own picture: logos and simple line drawings engrave best. We confirm the final artwork with you on WhatsApp before engraving."],
+    ["How does picture engraving work?", "On any product, choose Picture and tap a design from our gallery." + (ALLOW_PHOTO_UPLOAD ? " You can also upload your own picture: logos and simple line drawings engrave best." : "") + " We confirm the final artwork with you on WhatsApp before engraving."],
     ["How do I pay?", onlineCheckout() ? "At checkout you pay securely through Ziina by card, Apple Pay or Google Pay." : "Send your order from the checkout page on WhatsApp, and we'll confirm payment with you there."],
     ["Can I return a personalised item?", "Because each piece is made for you, personalised items can't be returned or exchanged unless they arrive damaged or with a mistake on our side. See Delivery & returns for details."],
     ["Do you do events and bulk orders?", "Yes — we bring a live engraving station to weddings, activations and private events, and handle bulk corporate gifting. See Live events or WhatsApp us."],
@@ -171,14 +172,14 @@ export function Policy({ which }) {
     terms: ["Terms of sale", [
       ["Who we are", `RTLH is a DED-licensed business based in ${CITY}. These terms apply to orders placed on rtlh.art.`],
       ["Orders", "Your order is confirmed once payment is received. We may contact you on WhatsApp to confirm your personalisation, especially for photo engraving. We may decline an order or a design (for example, trademarks you don't own, or offensive content) and refund you in full."],
-      ["Prices & payment", "Prices are in UAE dirhams (AED). Payments are processed securely by Ziina; RTLH never sees or stores your card details."],
+      ["Prices & payment", "Prices are in UAE dirhams (AED), shown with the dirham symbol. Payments are processed securely by Ziina; RTLH never sees or stores your card details."],
       ["Your content", "By uploading a photo or text, you confirm you have the right to use it. We only use it to make your order."],
       ["Product photos", "Product photos are for reference. Leather is a natural material and every engraving is set by hand, so colour, texture and placement may vary slightly."],
       ["Delivery & returns", "See our Delivery & returns policy."],
       ["Contact", `WhatsApp ${WHATSAPP_DISPLAY} or Instagram @${INSTAGRAM}.`],
     ]],
     privacy: ["Privacy policy", [
-      ["What we collect", "Your name, mobile number, email (if you give it), delivery address, order details, and any photo you upload for engraving."],
+      ["What we collect", "Your name, mobile number, email (if you give it), delivery address, order details, and the text or picture you choose for engraving."],
       ["Why", "Only to make and deliver your order, contact you about it, and keep business and tax records."],
       ["Payments", "Card and Apple Pay / Google Pay payments are handled by Ziina. We don't receive or store your card details."],
       ["Where it's stored", "Order details are stored in our private Google account (Google Sheets and Google Drive). We don't sell or share your information with anyone except our delivery partner, who needs your name, phone and address."],

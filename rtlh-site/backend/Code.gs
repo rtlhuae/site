@@ -120,6 +120,8 @@ function createOrder_(b) {
   if (phone.replace(/\D/g, '').length < 9) throw new Error('Please enter a valid mobile number.');
   if (email && !/^\S+@\S+\.\S+$/.test(email)) throw new Error('Please check your email address.');
   const method = d.method === 'pickup' && catalog.delivery.pickup ? 'pickup' : 'delivery';
+  const emirate = method === 'delivery' ? clean_(d.emirate, 40) : '';
+  if (method === 'delivery' && catalog.delivery.emirates && catalog.delivery.emirates.indexOf(emirate) < 0) throw new Error('Please choose your emirate.');
   if (method === 'delivery' && (!clean_(d.area, 80) || clean_(d.address, 200).length < 4)) throw new Error('Please enter your delivery address.');
 
   const raw = Array.isArray(b.items) ? b.items : [];
@@ -140,7 +142,10 @@ function createOrder_(b) {
     if (mode === 'text' && !text) throw new Error(p.name + ': please add the text to engrave.');
     let photoUrl = '';
     if (mode === 'photo') {
-      if (it.photo && it.photo.data) photoUrl = savePhoto_(id, i + 1, it.photo);
+      if (it.photo && it.photo.data) {
+        if (catalog.uploads === false) throw new Error(p.name + ': please choose a picture from our gallery.');
+        photoUrl = savePhoto_(id, i + 1, it.photo);
+      }
       else if (!it.designNo) throw new Error(p.name + ': the photo didn\'t upload. Please add it again.');
     }
     const unit = p.price + (mode === 'text' ? p.textPrice : mode === 'photo' ? p.photoPrice : 0);
@@ -149,10 +154,13 @@ function createOrder_(b) {
   });
 
   const subtotal = items.reduce(function (a, x) { return a + x.line; }, 0);
-  const fee = method === 'pickup' ? 0 : (catalog.delivery.freeOver && subtotal >= catalog.delivery.freeOver ? 0 : (catalog.delivery.fee || 0));
+  const fees = catalog.delivery.fees || {};
+  const fee = method === 'pickup' ? 0
+    : (catalog.delivery.freeOver && subtotal >= catalog.delivery.freeOver) ? 0
+    : (fees.hasOwnProperty(emirate) ? fees[emirate] : (catalog.delivery.other || 0));
   const total = subtotal + fee;
   const order = { id: id, token: token, created: created, name: name, phone: phone, email: email, method: method,
-    emirate: method === 'delivery' ? clean_(d.emirate, 40) : '', area: clean_(d.area, 80), address: clean_(d.address, 200),
+    emirate: emirate, area: clean_(d.area, 80), address: clean_(d.address, 200),
     notes: clean_(d.notes, 300), gift: clean_(b.giftNote, 200), items: items, subtotal: subtotal, delivery: fee, total: total,
     test: isTest_(), status: 'awaiting_payment' };
 

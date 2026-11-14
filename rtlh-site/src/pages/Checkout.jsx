@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, Lock, ShoppingBag, MessageCircle, ChevronLeft } from "lucide-react";
-import { useCart, deliveryFor } from "../lib/cart.jsx";
+import { useCart, deliveryFor, feeForEmirate } from "../lib/cart.jsx";
 import { CartLines } from "../components/Layout.jsx";
 import { aed, lineSummary, waLink } from "../lib/format.js";
 import { createOrder, onlineCheckout } from "../lib/api.js";
-import { EMIRATES, PICKUP_ENABLED, DELIVERY_FEE, FREE_DELIVERY_OVER, CITY } from "../config.js";
+import { EMIRATES, PICKUP_ENABLED, DELIVERY_FEES, DELIVERY_FEE_OTHER, FREE_DELIVERY_OVER, CITY } from "../config.js";
+import { Dh } from "../components/Dirham.jsx";
 
 const SAVED = "rtlh_customer";
 
@@ -19,7 +20,7 @@ export function CartPage() {
           <>
             <CartLines />
             <div className="totals" style={{ margin: "20px 0" }}>
-              <div><span>Subtotal</span><b>{aed(subtotal)}</b></div>
+              <div><span>Subtotal</span><b><Dh v={subtotal} /></b></div>
               <div className="muted small"><span>Delivery calculated at checkout</span></div>
             </div>
             <Link className="btn block" to="/checkout">Checkout <ArrowRight size={16} /></Link>
@@ -32,10 +33,15 @@ export function CartPage() {
   );
 }
 
-function deliveryNote() {
-  if (!DELIVERY_FEE) return "Free";
-  if (FREE_DELIVERY_OVER) return `${aed(DELIVERY_FEE)} · free over ${aed(FREE_DELIVERY_OVER)}`;
-  return aed(DELIVERY_FEE);
+function DeliveryNote() {
+  const named = Object.entries(DELIVERY_FEES);
+  return (
+    <span style={{ textAlign: "right", fontSize: 13, lineHeight: 1.5 }}>
+      {named.map(([em, fee]) => <span key={em} style={{ display: "block" }}>{em} <Dh v={fee} /></span>)}
+      <span style={{ display: "block" }}>{named.length ? "Other emirates" : "UAE"} <Dh v={DELIVERY_FEE_OTHER} /></span>
+      {FREE_DELIVERY_OVER ? <span style={{ display: "block" }}>Free over <Dh v={FREE_DELIVERY_OVER} /></span> : null}
+    </span>
+  );
 }
 
 export default function Checkout() {
@@ -57,7 +63,7 @@ export default function Checkout() {
     } catch { /* ignore */ }
   }, []);
 
-  const delivery = deliveryFor(subtotal, f.method);
+  const delivery = deliveryFor(subtotal, f.method, f.emirate);
   const total = subtotal + delivery;
   const set = (k) => (e) => { const v = e.target.type === "checkbox" ? e.target.checked : e.target.value; setF((p) => ({ ...p, [k]: v })); setErrors((x) => ({ ...x, [k]: "" })); };
 
@@ -174,7 +180,7 @@ export default function Checkout() {
             <div className="radio-cards">
               <label className={`radio-card ${f.method === "delivery" ? "on" : ""}`}>
                 <input type="radio" name="method" value="delivery" checked={f.method === "delivery"} onChange={set("method")} />
-                <div><b>Deliver to me</b>Anywhere in the UAE</div><span>{deliveryNote()}</span>
+                <div><b>Deliver to me</b>Anywhere in the UAE</div><DeliveryNote />
               </label>
               {PICKUP_ENABLED && (
                 <label className={`radio-card ${f.method === "pickup" ? "on" : ""}`}>
@@ -205,9 +211,9 @@ export default function Checkout() {
             <h3><i>3</i>Your order</h3>
             <CartLines compact />
             <div className="totals" style={{ marginTop: 16 }}>
-              <div><span>Subtotal</span><span>{aed(subtotal)}</span></div>
-              <div><span>Delivery</span><span>{delivery ? aed(delivery) : "Free"}</span></div>
-              <div className="grand"><span>Total</span><span>{aed(total)}</span></div>
+              <div><span>Subtotal</span><span><Dh v={subtotal} /></span></div>
+              <div><span>Delivery{f.method === "delivery" ? ` · ${f.emirate}` : " · Pick up"}</span><span>{delivery ? <Dh v={delivery} /> : "Free"}</span></div>
+              <div className="grand"><span>Total</span><span><Dh v={total} /></span></div>
             </div>
             {online && (
               <label style={{ display: "flex", gap: 10, alignItems: "flex-start", marginTop: 16, fontSize: 13.5, color: "var(--ink-2)", cursor: "pointer" }}>
@@ -218,7 +224,7 @@ export default function Checkout() {
             <Err k="agree" />
             {fail && <div className="alert bad" role="alert">{fail}</div>}
             <button className="btn block clay" type="submit" disabled={busy} style={{ marginTop: 16 }}>
-              {busy ? <><span className="spin" /> Starting secure payment…</> : online ? <><Lock size={16} /> Pay {aed(total)}</> : <><MessageCircle size={17} /> Send order on WhatsApp</>}
+              {busy ? <><span className="spin" /> Starting secure payment…</> : online ? <><Lock size={16} /> Pay <Dh v={total} /></> : <><MessageCircle size={17} /> Send order on WhatsApp</>}
             </button>
             {online ? (
               <div className="paybox"><Lock size={13} /> Secured by Ziina <span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span></div>

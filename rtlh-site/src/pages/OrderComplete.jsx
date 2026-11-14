@@ -3,7 +3,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { CheckCircle2, XCircle, Clock, MessageCircle } from "lucide-react";
 import { orderStatus } from "../lib/api.js";
 import { useCart } from "../lib/cart.jsx";
-import { aed, waLink } from "../lib/format.js";
+import { waLink } from "../lib/format.js";
+import { Dh } from "../components/Dirham.jsx";
 
 // Ziina sends the customer back here. We never trust the URL alone — we ask
 // our server, which asks Ziina, whether the payment really went through.
@@ -65,7 +66,7 @@ export default function OrderComplete() {
             <span className="eyebrow">Order {state.order.id}</span>
             <h1 style={{ fontSize: 44, marginBottom: 12 }}>Thank you{state.order.firstName ? `, ${state.order.firstName}` : ""}.</h1>
             <p className="lead" style={{ margin: "0 auto 20px" }}>
-              Your payment of <b>{aed(state.order.total)}</b> went through and your order is with our engravers.
+              Your payment of <b><Dh v={state.order.total} /></b> went through and your order is with our engravers.
               We'll message you on WhatsApp when it's ready{state.order.email ? " — and a receipt is on its way to your email" : ""}.
             </p>
             {state.order.items?.length > 0 && (
@@ -82,7 +83,7 @@ export default function OrderComplete() {
             <span className="eyebrow">Order {state.order.id}</span>
             <h1 style={{ fontSize: 44, marginBottom: 12 }}>Order received{state.order.firstName ? `, ${state.order.firstName}` : ""}.</h1>
             <p className="lead" style={{ margin: "0 auto 20px" }}>
-              Thank you! Your order total is <b>{aed(state.order.total)}</b>. We'll message you on WhatsApp shortly to confirm the details and arrange payment.
+              Thank you! Your order total is <b><Dh v={state.order.total} /></b>. We'll message you on WhatsApp shortly to confirm the details and arrange payment.
             </p>
             {state.order.items?.length > 0 && (
               <div className="co-block" style={{ textAlign: "left", margin: "0 auto 22px" }}>

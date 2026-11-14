@@ -5,7 +5,8 @@ import { findProduct, colorName, colorHex, FONTS, unitPrice, PRODUCTS } from "..
 import { ProductCard } from "../components/Product.jsx";
 import { GalleryPicker, designImg, GALLERY_NUMBERS } from "../components/Gallery.jsx";
 import { useCart } from "../lib/cart.jsx";
-import { aed, img, srcSet, waLink } from "../lib/format.js";
+import { img, srcSet, waLink } from "../lib/format.js";
+import { Dh } from "../components/Dirham.jsx";
 import { preparePhoto, savePhoto, deletePhoto } from "../lib/photos.js";
 import { ALLOW_PHOTO_UPLOAD, PHOTO_MAX_MB, PRODUCTION_DAYS, PICKUP_ENABLED } from "../config.js";
 import { catSlug } from "../seo.js";
@@ -152,7 +153,7 @@ function ProductView({ product }) {
           <div className="pdp-info">
             <span className="eyebrow">{product.category}</span>
             <h1>{product.name}</h1>
-            <div className="price-row"><span className="price">{aed(price)}</span>{price === product.price && mode !== "none" && <span className="muted small">engraving included</span>}</div>
+            <div className="price-row"><span className="price"><Dh v={price} /></span>{price === product.price && mode !== "none" && <span className="muted small">engraving included</span>}</div>
             <p style={{ color: "var(--ink-2)" }}>{product.description}</p>
 
             {product.colors.length > 1 && (
@@ -258,7 +259,7 @@ function ProductView({ product }) {
                 <span>{qty}</span>
                 <button aria-label="More" onClick={() => setQty(Math.min(20, qty + 1))}><Plus size={16} /></button>
               </div>
-              <button className="btn" onClick={addToBag} disabled={busy}>Add to bag · {aed(price * qty)}</button>
+              <button className="btn" onClick={addToBag} disabled={busy}>Add to bag · <Dh v={price * qty} /></button>
             </div>
             {added && <p className="muted small" style={{ marginTop: 10 }}>Added ✓ — personalise another one, or <Link className="link" style={{ fontSize: 13 }} to="/checkout">go to checkout</Link>.</p>}
 
@@ -296,7 +297,7 @@ function ProductView({ product }) {
       </section>
 
       <div className={`sticky-buy ${showSticky ? "on" : ""}`}>
-        <div><div style={{ fontSize: 13, color: "var(--muted)" }}>{product.name}</div><div className="p">{aed(price * qty)}</div></div>
+        <div><div style={{ fontSize: 13, color: "var(--muted)" }}>{product.name}</div><div className="p"><Dh v={price * qty} /></div></div>
         <button className="btn" onClick={addToBag}>Add to bag</button>
       </div>
 

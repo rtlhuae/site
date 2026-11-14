@@ -22,10 +22,11 @@ export const CITY = "Dubai, UAE";
 const ORDER_API = "";   // ← paste your Apps Script /exec URL between the quotes
 export const ORDER_API_URL = ORDER_API || import.meta.env.VITE_ORDER_API_URL || "";
 
-/* Delivery. The payment server reads these automatically from the site,
-   so changing them here is enough. */
-export const DELIVERY_FEE = 0;          // AED, 0 = free delivery
-export const FREE_DELIVERY_OVER = 0;    // AED, 0 = no threshold
+/* Delivery fees in dirhams. The payment server reads these automatically
+   from the site, so changing them here is enough. */
+export const DELIVERY_FEES = { Dubai: 25 };   // emirates with their own price
+export const DELIVERY_FEE_OTHER = 35;         // every other emirate
+export const FREE_DELIVERY_OVER = 0;          // 0 = no free-delivery threshold
 export const PICKUP_ENABLED = true;     // show "Pick up in Dubai" option (free)
 export const PRODUCTION_DAYS = "2–4 working days";
 
@@ -35,6 +36,6 @@ export const EMIRATES = [
 
 /* Picture engraving: customers always choose from your gallery
    (assets-src/gallery). true = they can ALSO upload their own photo. */
-export const ALLOW_PHOTO_UPLOAD = true;
+export const ALLOW_PHOTO_UPLOAD = false;
 
 export const PHOTO_MAX_MB = 15;

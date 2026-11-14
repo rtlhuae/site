@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { X, ArrowRight } from "lucide-react";
 import { DesignGrid, designImg } from "../components/Gallery.jsx";
 import { PRODUCTS } from "../data/products.js";
-import { aed, img } from "../lib/format.js";
+import { img } from "../lib/format.js";
+import { Dh } from "../components/Dirham.jsx";
 
 export default function GalleryPage() {
   const [chosen, setChosen] = useState(null);
@@ -34,7 +35,7 @@ export default function GalleryPage() {
                 <Link key={p.slug} to={`/product/${p.slug}?design=${chosen}`} className="line" style={{ alignItems: "center" }}>
                   <span className="line-img"><img src={img(p.mainImage, 480)} alt="" /></span>
                   <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-                    <span><h4>{p.name}</h4><span className="muted small">{aed(p.price)}</span></span>
+                    <span><h4>{p.name}</h4><span className="muted small"><Dh v={p.price} /></span></span>
                     <ArrowRight size={18} />
                   </span>
                 </Link>

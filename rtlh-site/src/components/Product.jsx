@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { colorHex } from "../data/products.js";
-import { aed, img, srcSet } from "../lib/format.js";
+import { img, srcSet } from "../lib/format.js";
+import { Dh } from "./Dirham.jsx";
 
 export function ProductCard({ product, eager }) {
   const alt = product.colors[0]?.image !== product.mainImage ? product.colors[0]?.image : product.colors[1]?.image;
@@ -20,7 +21,7 @@ export function ProductCard({ product, eager }) {
       <div className="card-body">
         <h3>{product.name}</h3>
         <p>{product.short}</p>
-        <div className="card-price">{aed(product.price)}</div>
+        <div className="card-price"><Dh v={product.price} /></div>
         {product.colors.length > 1 && (
           <div className="swatches-mini" aria-label={`${product.colors.length} colours`}>
             {product.colors.slice(0, 6).map((c) => <i key={c.id} style={{ background: colorHex(c.id) }} />)}

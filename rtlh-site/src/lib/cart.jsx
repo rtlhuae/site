@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import { findProduct, unitPrice } from "../data/products.js";
-import { DELIVERY_FEE, FREE_DELIVERY_OVER } from "../config.js";
+import { DELIVERY_FEES, DELIVERY_FEE_OTHER, FREE_DELIVERY_OVER } from "../config.js";
 import { deletePhoto } from "./photos.js";
 
 const KEY = "rtlh_cart_v2";
@@ -15,10 +15,12 @@ function read() {
   }
 }
 
-export function deliveryFor(subtotal, method) {
+export const feeForEmirate = (emirate) => (emirate in DELIVERY_FEES ? DELIVERY_FEES[emirate] : DELIVERY_FEE_OTHER);
+
+export function deliveryFor(subtotal, method, emirate) {
   if (method === "pickup") return 0;
   if (FREE_DELIVERY_OVER && subtotal >= FREE_DELIVERY_OVER) return 0;
-  return DELIVERY_FEE;
+  return feeForEmirate(emirate);
 }
 
 export function CartProvider({ children }) {

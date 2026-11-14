@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingBag, Instagram, MessageCircle, ArrowRight, Minus, Plus, MapPin, Music2 } from "lucide-react";
 import { useCart } from "../lib/cart.jsx";
-import { aed, img, personalisationText, waLink } from "../lib/format.js";
+import { img, personalisationText, waLink } from "../lib/format.js";
+import { Dh } from "./Dirham.jsx";
 import { colorName, CATEGORIES } from "../data/products.js";
 import { INSTAGRAM, TIKTOK, WHATSAPP_DISPLAY, CITY, SLOGAN } from "../config.js";
 import { catSlug } from "../seo.js";
@@ -44,7 +45,7 @@ export function CartLines({ compact }) {
       <div>
         <div className="row" style={{ alignItems: "flex-start" }}>
           <h4>{l.product.name}</h4>
-          <b style={{ fontSize: 14.5, whiteSpace: "nowrap" }}>{aed(l.total)}</b>
+          <b style={{ fontSize: 14.5, whiteSpace: "nowrap" }}><Dh v={l.total} /></b>
         </div>
         <div className="meta">
           {colorName(l.color)} · {personalisationText(l)}
@@ -85,7 +86,7 @@ function CartDrawer() {
         {items.length > 0 && (
           <div className="sheet-foot">
             <div className="totals" style={{ marginBottom: 14 }}>
-              <div><span>Subtotal</span><b>{aed(subtotal)}</b></div>
+              <div><span>Subtotal</span><b><Dh v={subtotal} /></b></div>
               <div className="muted small"><span>Delivery calculated at checkout</span></div>
             </div>
             <Link className="btn block" to="/checkout" onClick={() => setDrawerOpen(false)}>

@@ -107,9 +107,9 @@ All paths are inside `rtlh-site/`.
 | Hide a product or colour | `hidden: true` in `src/data/products.js` |
 | Add a colour or product photo | Upload the PNG/JPG into `assets-src/products/` on GitHub, then add `{ id: "black", image: "FileNameWithoutExtension" }` in products.js. The build optimises it automatically. |
 | Add gallery pictures | Upload `101.jpg`, `102.jpg`… into `assets-src/gallery/`. They appear in the picture chooser automatically — nothing else to change. |
-| Turn off "Upload your own" photos | `ALLOW_PHOTO_UPLOAD = false` in `src/config.js` (customers then only pick from the gallery) |
+| Let customers upload their own photo | `ALLOW_PHOTO_UPLOAD = true` in `src/config.js` (off now: gallery pictures only) |
 | Charge for engraving | `textPrice: 10` / `picturePrice: 20` in that product's `personalise` |
-| Set a delivery fee | `DELIVERY_FEE` / `FREE_DELIVERY_OVER` in `src/config.js` |
+| Change delivery prices | `DELIVERY_FEES` (Dubai 25), `DELIVERY_FEE_OTHER` (other emirates 35), `FREE_DELIVERY_OVER` in `src/config.js` |
 | Change WhatsApp number | `src/config.js` |
 | Edit policies / FAQ text | `src/pages/Info.jsx` |
 

@@ -10,7 +10,7 @@ import { pathToFileURL } from "node:url";
 const root = process.cwd();
 const dist = path.join(root, "dist");
 const ssr = await import(pathToFileURL(path.join(root, "dist-ssr", "entry-server.js")).href);
-const { render, metaFor, allRoutes, PRODUCTS, COLORS, DELIVERY_FEE, FREE_DELIVERY_OVER, PICKUP_ENABLED, SITE_URL } = ssr;
+const { render, metaFor, allRoutes, PRODUCTS, COLORS, DELIVERY_FEES, DELIVERY_FEE_OTHER, FREE_DELIVERY_OVER, PICKUP_ENABLED, SITE_URL, EMIRATES, ALLOW_PHOTO_UPLOAD } = ssr;
 
 const template = fs.readFileSync(path.join(dist, "index.html"), "utf8");
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
@@ -67,7 +67,8 @@ fs.writeFileSync(path.join(dist, "404.html"), page("/404", "").replace("<!--robo
 // Prices the payment server trusts (it never trusts prices sent by the browser).
 const catalog = {
   updated: new Date().toISOString(),
-  delivery: { fee: DELIVERY_FEE, freeOver: FREE_DELIVERY_OVER, pickup: PICKUP_ENABLED },
+  delivery: { fees: DELIVERY_FEES, other: DELIVERY_FEE_OTHER, freeOver: FREE_DELIVERY_OVER, pickup: PICKUP_ENABLED, emirates: EMIRATES },
+  uploads: ALLOW_PHOTO_UPLOAD,
   products: Object.fromEntries(PRODUCTS.map((p) => [p.slug, {
     name: p.name, adminName: p.adminName || p.name, price: p.price,
     textPrice: p.personalise.textPrice || 0, photoPrice: p.personalise.picturePrice || 0,
