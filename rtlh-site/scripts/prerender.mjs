@@ -10,7 +10,7 @@ import { pathToFileURL } from "node:url";
 const root = process.cwd();
 const dist = path.join(root, "dist");
 const ssr = await import(pathToFileURL(path.join(root, "dist-ssr", "entry-server.js")).href);
-const { render, metaFor, allRoutes, PRODUCTS, COLORS, DELIVERY_FEES, DELIVERY_FEE_OTHER, FREE_DELIVERY_OVER, PICKUP_ENABLED, SITE_URL, EMIRATES, ALLOW_PHOTO_UPLOAD } = ssr;
+const { render, metaFor, allRoutes, PRODUCTS, ALL_PRODUCTS, COLORS, DELIVERY_FEES, DELIVERY_FEE_OTHER, FREE_DELIVERY_OVER, PICKUP_ENABLED, SITE_URL, EMIRATES, ALLOW_PHOTO_UPLOAD } = ssr;
 
 const template = fs.readFileSync(path.join(dist, "index.html"), "utf8");
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
@@ -78,6 +78,25 @@ const catalog = {
   }])),
 };
 fs.writeFileSync(path.join(dist, "catalog.json"), JSON.stringify(catalog, null, 1));
+
+// Full product list for the RTLH Admin app and the event kiosk (includes hidden
+// products and colours that are not on the website). Photos: /img/p/<image>-480.webp
+const catalogAll = {
+  updated: catalog.updated,
+  img: `${SITE_URL}/img/p/`,
+  gallery: `${SITE_URL}/img/g/`,
+  products: ALL_PRODUCTS.map((p) => ({
+    slug: p.slug, name: p.name, adminName: p.adminName || p.name, aliases: p.aliases || [],
+    category: p.category, price: p.price, hidden: !!p.hidden, badge: p.badge || "", mainImage: p.mainImage, gallery: p.gallery || [],
+    personalise: p.personalise || {},
+    colors: p.colors.filter((c) => !c.hidden).map((c) => ({
+      id: c.id, name: COLORS[c.id] ? COLORS[c.id][0] : c.id, hex: COLORS[c.id] ? COLORS[c.id][1] : "#ccc",
+      image: c.image, web: c.web !== false,
+    })),
+  })),
+};
+fs.writeFileSync(path.join(dist, "catalog-all.json"), JSON.stringify(catalogAll));
+fs.copyFileSync(path.join(root, "src", "data", "gallery.json"), path.join(dist, "gallery.json"));
 
 const indexable = routes.filter((r) => !metaFor(r).noindex);
 fs.writeFileSync(path.join(dist, "sitemap.xml"),
