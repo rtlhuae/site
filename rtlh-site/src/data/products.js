@@ -15,6 +15,14 @@
                              3) add the color to COLORS below if it's new
    • TURN OFF TEXT ......... personalise: { text: false, ... }
    • TURN OFF PICTURES ..... personalise: { picture: false, ... }
+   • NOT ON WEBSITE ........ add   web: false   inside a color's { }  — the color
+                             stays in the Admin app and event kiosk (e.g. a color
+                             you stock but have no photo for yet)
+   • OLD NAMES ............. aliases: [...] = names used in your Google Sheets
+                             before, so the Admin app counts them as this product
+
+   Admin app + event kiosk read this file too (rtlh.art/catalog-all.json),
+   so a price or color changed here updates everywhere.
 
    Gallery pictures: upload 101.jpg, 102.jpg … to rtlh-site/assets-src/gallery/
    — they show up in the picture chooser automatically.
@@ -65,6 +73,13 @@ export const COLORS = {
   newblue: ["Blue", "#2F6FB5"],
   titaniumgray: ["Titanium Gray", "#7E8083"],
   wine: ["Wine", "#6B1F2F"],
+  babyblue: ["Blue", "#A9D8E6"],
+  sage: ["Green", "#A8C49A"],
+  darkpink: ["Dark Pink", "#C2185B"],
+  heart: ["Heart", "#CFCFCF"],
+  oval: ["Oval · Detailed border", "#CFCFCF"],
+  ovaldouble: ["Oval · Double crystal border", "#E8DCCB"],
+  largeoval: ["Large Oval · Crystal border", "#CFCFCF"],
 };
 
 /* Fonts the customer can choose for text engraving. Remove a line to stop offering it. */
@@ -79,6 +94,7 @@ export const ALL_PRODUCTS = [
   {
     slug: "the-porte", name: "The Porte", badge: "Bestseller",
     adminName: "MagSafe",           // name used in your RTLH Admin app
+    aliases: ["MagSafe", "MagSafe Wallet Without Stand"],
     hidden: false,
     category: "Tech", price: 75,
     short: "MagSafe card holder, engraved on the back.",
@@ -112,6 +128,7 @@ export const ALL_PRODUCTS = [
   {
     slug: "magsafe-with-stand", name: "MagSafe With Stand", badge: "New",
     adminName: "MagSafe With Stand",
+    aliases: ["MagSafe Wallet With Stand"],
     hidden: false,
     category: "Tech", price: 95,
     short: "MagSafe card holder with a fold-out stand.",
@@ -147,7 +164,9 @@ export const ALL_PRODUCTS = [
       { id: "pink", image: "TheHeartpiecePink" },
       { id: "red", image: "TheHeartpieceRed" },
       { id: "gray", image: "TheHeartpieceGray" },
+      { id: "burgundy", image: "TheHeartpieceMain", web: false },
     ],
+    aliases: ["Heart Charms", "Heart Charm"],
     personalise: { text: true, maxChars: 24, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -164,6 +183,7 @@ export const ALL_PRODUCTS = [
       { id: "red", image: "HeartMirrorRed" },
       { id: "cream", image: "HeartMirrorWhite" },
     ],
+    aliases: ["Heart Mirrors"],
     personalise: { text: true, maxChars: 18, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -179,6 +199,7 @@ export const ALL_PRODUCTS = [
       { id: "pink", image: "FoldableMirrorPink", },
       { id: "white", image: "FoldableMirrorWhite", },
     ],
+    aliases: ["Rectangular Mirrors"],
     personalise: { text: true, maxChars: 20, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -196,13 +217,15 @@ export const ALL_PRODUCTS = [
       { id: "red", image: "TheVoyageTagRed" },
       { id: "white", image: "TheVoyageTagWhite" },
     ],
+    aliases: ["Voyage Tags"],
     personalise: { text: true, maxChars: 22, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
-    slug: "the-heart-necklace", name: "The Heart Necklace",
+    slug: "the-heart-necklace", name: "The Small Heart Necklace",
     adminName: "The Necklace",
+    aliases: ["The Necklace", "The Heart Necklace", "Small Heart Necklaces"],
     hidden: false,
-    category: "Jewelry", price: 110,
+    category: "Jewelry", price: 135,
     short: "Gold heart pendant, engraved with one initial.",
     description: "A delicate gold heart pendant on a fine chain — the smallest gesture, made to be worn every day.",
     details: ["Gold heart pendant", "Fine chain", "One engraved initial"],
@@ -227,6 +250,7 @@ export const ALL_PRODUCTS = [
       { id: "navy", image: "RTLHCardHolderNavy" },
     ],
     gallery: ["RTLHWallet"],
+    aliases: ["RTLH Card Holder"],
     personalise: { text: true, maxChars: 20, picture: true, textPrice: 0, picturePrice: 0 },
   },
   {
@@ -244,7 +268,89 @@ export const ALL_PRODUCTS = [
       { id: "blue", image: "CardholderBlue" },
       { id: "pink", image: "CardholderPink" },
     ],
+    aliases: ["PU Leather Card Holders"],
     personalise: { text: true, maxChars: 20, picture: true, textPrice: 0, picturePrice: 0 },
+  },
+  {
+    slug: "the-star-charm", name: "The Star Charm", badge: "New",
+    hidden: false,
+    category: "Charms", price: 40,
+    short: "Star bag charm on a soft leather strap.",
+    description: "A leather star on a knotted strap — clip it to a bag or keys and engrave it with a name or initials.",
+    details: ["Leather star on a knotted strap", "Ten colours", "Text or picture engraving"],
+    mainImage: "StarCharmMain",
+    colors: [
+      { id: "black", image: "StarCharmBlack" },
+      { id: "babyblue", image: "StarCharmBlue" },
+      { id: "brown", image: "StarCharmBrown" },
+      { id: "burgundy", image: "StarCharmBurgendy" },
+      { id: "cream", image: "StarCharmCreme" },
+      { id: "gray", image: "StarCharmGray" },
+      { id: "sage", image: "StarCharmGreen" },
+      { id: "lightpink", image: "StarCharmPink" },
+      { id: "purple", image: "StarCharmPurple" },
+      { id: "white", image: "StarCharmWhite" },
+      { id: "darkpink", image: "StarCharmMain", web: false },
+    ],
+    aliases: ["Star Charms"],
+    personalise: { text: true, maxChars: 12, picture: true, textPrice: 0, picturePrice: 0 },
+  },
+  {
+    slug: "the-heart-pendant", name: "The Heart Pendant", badge: "New",
+    hidden: false,
+    category: "Jewelry", price: 110,
+    short: "Heart pendant with a crystal border, in gold or silver.",
+    description: "A heart pendant framed in tiny crystals on a fine chain — engraved with an initial or a short word.",
+    details: ["Heart pendant with crystal border", "Gold or silver", "Text or picture engraving"],
+    mainImage: "HeartNecklaceGem",
+    colors: [
+      { id: "gold", image: "HeartNecklaceGem" },
+      { id: "silver", image: "HeartNecklaceGemSilver" },
+    ],
+    aliases: ["Heart Pendant Necklaces", "Heart Pendant Necklace"],
+    personalise: { text: true, maxChars: 4, picture: true, textPrice: 0, picturePrice: 0 },
+  },
+  {
+    slug: "the-heart-ring", name: "The Heart Ring", badge: "New",
+    hidden: false,
+    category: "Jewelry", price: 110,
+    short: "Gold heart ring, engraved on the heart.",
+    description: "An adjustable gold ring with a flat heart face — engraved with an initial, a date, or a tiny picture.",
+    details: ["Adjustable gold ring", "Flat heart face", "Text or picture engraving"],
+    mainImage: "HeartRing",
+    colors: [{ id: "gold", image: "HeartRing" }],
+    aliases: ["Heart Rings"],
+    personalise: { text: true, maxChars: 6, picture: true, textPrice: 0, picturePrice: 0 },
+  },
+  {
+    slug: "the-mirror-grip", name: "The Mirror Grip", badge: "New",
+    hidden: false,
+    category: "Tech", price: 65,
+    short: "Mirror phone grip with a crystal border.",
+    description: "A pocket mirror that sticks to the back of your phone and doubles as a grip — framed in crystals.",
+    details: ["Sticks to the back of any phone", "Mirror and phone grip in one", "Four designs"],
+    mainImage: "PopSocketMain",
+    colors: [
+      { id: "heart", image: "PopSocketHeart" },
+      { id: "ovaldouble", image: "PopSocketOvalDouble" },
+      { id: "oval", image: "PopSocketOval" },
+      { id: "largeoval", image: "PopSocketOval" },
+    ],
+    aliases: ["Mirror Phone Grips", "PopSocket"],
+    personalise: { text: false, maxChars: 0, picture: false, textPrice: 0, picturePrice: 0 },
+  },
+  {
+    // Sold at events only. Set a price and hidden: false to put it on the website.
+    slug: "the-gua-sha", name: "Gua Sha",
+    hidden: true,
+    category: "Vanity", price: 0,
+    short: "Engraved gua sha.",
+    description: "A gua sha stone, engraved with a name or initials.",
+    details: ["Text engraving"],
+    mainImage: "GuaSha",
+    colors: [],
+    aliases: ["Gua Sha"],
+    personalise: { text: true, maxChars: 15, picture: false, textPrice: 0, picturePrice: 0 },
   },
 ];
 
@@ -253,7 +359,7 @@ export const ALL_PRODUCTS = [
    ---------------------------------------------------------------------- */
 export const PRODUCTS = ALL_PRODUCTS
   .filter((p) => !p.hidden && p.price > 0)
-  .map((p) => ({ ...p, colors: p.colors.filter((c) => !c.hidden) }))
+  .map((p) => ({ ...p, colors: p.colors.filter((c) => !c.hidden && c.web !== false) }))
   .filter((p) => p.colors.length > 0);
 
 export const CATEGORIES = Array.from(new Set(PRODUCTS.map((p) => p.category)));
