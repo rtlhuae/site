@@ -1,0 +1,41 @@
+name: Sync stock to website
+
+# Every 10 minutes: colours that are out of stock in the RTLH Admin app are hidden on rtlh.art.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: stock-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Read stock from the Admin sheet
+        id: s
+        working-directory: rtlh-site
+        env:
+          RTLH_SHEET_URL: https://script.google.com/macros/s/AKfycby8IqyOK3DpAMI5SjI8_qmT_sDPOotzT-1l-0czE7XcNMd4edW9DHdrST-id8624tqFcw/exec
+        run: echo "result=$(node scripts/sync-stock.mjs | head -1)" >> "$GITHUB_OUTPUT"
+      - name: Publish if something changed
+        if: steps.s.outputs.result == 'changed'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "RTLH stock sync"
+          git config user.email "rtlhuae@gmail.com"
+          git add rtlh-site/src/data/soldout.json
+          git commit -m "Stock sync: update sold-out colours"
+          git push
+          gh workflow run deploy-pages.yml --ref main

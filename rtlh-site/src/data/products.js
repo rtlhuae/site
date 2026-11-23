@@ -357,9 +357,14 @@ export const ALL_PRODUCTS = [
 /* ----------------------------------------------------------------------
    Nothing below needs editing.
    ---------------------------------------------------------------------- */
+// Colours with no free stock in the Admin app (updated automatically by the
+// "Sync stock" GitHub workflow every few minutes) are hidden on the website.
+import SOLD_OUT from "./soldout.json" with { type: "json" };
+const soldOut = new Set(SOLD_OUT);
+
 export const PRODUCTS = ALL_PRODUCTS
   .filter((p) => !p.hidden && p.price > 0)
-  .map((p) => ({ ...p, colors: p.colors.filter((c) => !c.hidden && c.web !== false) }))
+  .map((p) => ({ ...p, colors: p.colors.filter((c) => !c.hidden && c.web !== false && !soldOut.has(`${p.slug}|${c.id}`)) }))
   .filter((p) => p.colors.length > 0);
 
 export const CATEGORIES = Array.from(new Set(PRODUCTS.map((p) => p.category)));
