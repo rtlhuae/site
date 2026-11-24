@@ -85,7 +85,7 @@ export const COLORS = {
 /* Fonts the customer can choose for text engraving. Remove a line to stop offering it. */
 export const FONTS = [
   { id: "classic", label: "Classic", css: "'Cormorant Garamond', serif", sample: "Aa" },
-  { id: "script", label: "Script", css: "'Great Vibes', cursive", sample: "Aa" },
+  { id: "script", label: "Italiano", css: "'Italiano', cursive", sample: "Aa" },
   { id: "modern", label: "Modern", css: "'Manrope', sans-serif", sample: "AA", upper: true },
   { id: "arabic", label: "Arabic", css: "'Amiri', serif", sample: "أ", arabic: true },
 ];
