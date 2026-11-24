@@ -181,7 +181,7 @@ export const ALL_PRODUCTS = [
       { id: "mint", image: "HeartMirrorBlue" },
       { id: "pink", image: "HeartMirrorPink" },
       { id: "red", image: "HeartMirrorRed" },
-      { id: "cream", image: "HeartMirrorWhite" },
+      { id: "white", image: "HeartMirrorWhite" },
     ],
     aliases: ["Heart Mirrors"],
     personalise: { text: true, maxChars: 18, picture: true, textPrice: 0, picturePrice: 0 },
